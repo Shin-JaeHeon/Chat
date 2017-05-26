@@ -112,10 +112,10 @@ function date_ko(date) {
 	return `${date.getHours()}h ${date.getMinutes()}m ${date.getSeconds()}s`;
 }
 
-function addMsg(msg, nick, time, method) {
+function addMsg(msg, n, time, method) {
 	let chat = document.createElement('div');
 	chat.className = "user-chat";
-	let id =  `msg-${nick}-${new Date().getTime()}`;
+	let id =  `msg-${n}-${new Date().getTime()}`;
 	chat.setAttribute("id", id);
 	reply_l(chat);
 	let msgbox = document.createElement('p');
@@ -126,9 +126,13 @@ function addMsg(msg, nick, time, method) {
 	timebox.appendChild(document.createTextNode(time));
 	let nickbox = document.createElement('span');
 	nickbox.className = 'chat-nick';
-	nickbox.appendChild(document.createTextNode(nick));
+	nickbox.appendChild(document.createTextNode(n));
 	chat.appendChild(timebox);
 	chat.appendChild(nickbox);
+	if(n!=nick){
+        var noti = new Notification(`${n} : ${time} `,{body:msg,tag:'msg'});
+        noti.onclick= ()=>{ window.focus();noti.close(); };
+    }
 	if (method !== '') {
 		method(id,msgbox,(msgbox) => {
 			chat.appendChild(msgbox);
